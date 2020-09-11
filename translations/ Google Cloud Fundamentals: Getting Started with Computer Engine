@@ -1,0 +1,72 @@
+# LAB: Google Cloud Fundamentals: Getting Started with Computer Engine
+
+### Objectives:
+
+
+In this lab you will learn how to perform the fellowing tasks:
+
+  -  Create a computer engin virtual machine using the google cloud plaform (GCP) console.
+
+  -  Create a computer engine virtual machine using the glcoud command-line interface.
+
+  -  Coneect between the two instance.
+
+# Steps:
+
+1.  Create a computer engine virtual machine using the google cloud plaform (GCP) console.
+
+    glcloud computer instance create my-vm-1 --machine-type "n1-standard-1" --image-project "debian-cloud" -- image "debian-9-stretch-v20190213" -- subnet "default" -- tags http
+
+    gcloud computer firewall-rules create allow-http -- action=allow --destination=INGRESS -- rules= http:80 -- target-tags=http
+
+2. Create a compute engine virtual machine using the gcloud command-line interface.
+    gcloud config set computer create my-vm-2 -- machine-type "n1-standard-1" --image-prpject "debian-cloud" -- image "debian-9-stretch-v2019213" --subnet  "default"
+
+3. Connect between the two instances
+
+  1. Use the ping command to confirm that my-vm-2 can reach my-vm-1 over the network:
+     -  Connect to my-vm-2:
+            
+               gcloud computer ssh my-vm-2
+
+     - ping my-vm-1 from my-vm-2:
+
+               ping -c 4 my-vm-1
+
+     - Use the  ssh command to open a command prompt on my-vm-1 from my-vm-2
+
+               ssh my-vm-1
+
+      -  The command promt on my-vm-1 install the Nginx web server:
+
+               sudo apt-get install nginx-light -y
+
+      - use the nano text editor to add a custom message to the home page of the web server
+
+               sudo nano  /var/www/html/index.nginx-debian.html
+
+      - move your curser with the arrow key to below h1 header then add text , replace YOUR_NAME with your name.
+
+               Hi from  FRANCIS
+
+      - Exit the editor, run the command on the command prompt on my-vm-1
+
+               curl http://localhost
+
+       - RESULT:
+
+               The response will be the HTML source code of the web server's home page, including custom text.
+
+       - Type Exit in the command prompt of my-vm-1
+
+       - confirm my-vm-2 reach my-vm-1 on the web server, in the command prompt of my-vm-2 type
+
+               curl http://my-vm-1/
+
+2. To get external IP of my-vm-1 instance, execute this command
+  
+            glcloud computer instance list
+
+      - Past the IP address of my-vm-1 on a new web browser, hit enter
+
+      - Result: The custom test will display ON THE  WEB BROWSER
